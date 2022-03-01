@@ -1,0 +1,73 @@
+---
+- name: "PLAY: DEPLOY OBJECTS FROM CSV"
+  hosts: apic
+  connection: local
+  gather_facts: False
+  vars:
+    apic_info: &apic_info
+      host: "{{ inventory_hostname }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+      validate_certs: no
+
+  tasks:
+
+    - name: READ CSV
+      community.general.read_csv:
+        path: epg_list.csv
+      register: epg_list
+
+# Decomment to check "READ CSV" output
+#    - name: "Debug"
+#      debug: var=epg_list
+
+
+
+    - name: "DEPLOY: VRFs"
+      cisco.aci.aci_vrf:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        vrf: "{{ item.VRF }}"
+        state: present
+      loop: "{{ epg_list.list }}"
+
+    - name: "DEPLOY: ANPs"
+      cisco.aci.aci_ap:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        ap: "{{ item.ANP }}"
+        state: present
+      loop: "{{ epg_list.list }}"
+
+    - name: "DEPLOY: BDs"
+      cisco.aci.aci_bd:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        bd: "{{ item.BD }}"
+        vrf: "{{ item.VRF }}"
+        l2_unknown_unicast: flood
+        arp_flooding: yes
+        state: present
+      loop: "{{ epg_list.list }}"
+
+    - name: "DEPLOY: EPGs"
+      cisco.aci.aci_epg:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        ap: "{{ item.ANP }}"
+        epg: "{{ item.EPG }}"
+        description: "VLAN_{{ item.VLAN_ID }}"
+        state: present
+      loop: "{{ epg_list.list }}"
+
+    - name: "DEPLOY: DOMAIN TO EPG"
+      cisco.aci.aci_epg_to_domain:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        ap: "{{ item.ANP }}"
+        epg: "{{ item.EPG }}"
+        # Remember to set your Domain
+        domain: Physical_PhysDom
+        domain_type: phys
+        state: present
+      loop: "{{ epg_list.list }}"

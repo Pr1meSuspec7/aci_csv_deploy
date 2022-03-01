@@ -1,0 +1,4 @@
+VLAN_ID,VLAN_NAME,EPG,ANP,BD,VRF,TENANT
+10,myapp-web,myapp-web_epg,myapp_anp,myapp-web_bd,myapp_vrf,PROD
+20,myapp-app,myapp-app_epg,myapp_anp,myapp-app_bd,myapp_vrf,PROD
+30,myapp-db,myapp-db_epg,myapp_anp,myapp-db_bd,myapp_vrf,PROD
