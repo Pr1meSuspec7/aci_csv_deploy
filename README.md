@@ -10,11 +10,11 @@ This is an Ansible script that can help you to deploy many object from a CSV fil
 
 
 
- 1. Before all you have to set up your inventory file (inv.ini) and credentials file (group_vars/apic.yml).
+1. Before all you have to set up your inventory file (inv.ini) and credentials file (group_vars/apic.yml).
 <br>
- 2. In the "playbook.yml" change lines 70,71 with the correct "Domain" and "Domain Type" you want to use.
+2. In the "playbook.yml" change lines 70,71 with the correct "Domain" and "Domain Type" you want to use.
 <br>
- 3. In the main folder there is a CSV file called "epg_list.csv" which contains some columns:
+3. In the main folder there is a CSV file called "epg_list.csv" which contains some columns:
 
 
 VLAN_ID | VLAN_NAME | EPG | ANP | BD | VRF | TENANT
@@ -26,7 +26,7 @@ VLAN_ID | VLAN_NAME | EPG | ANP | BD | VRF | TENANT
 
 <br>
 
- 4. Fill the csv with the EPGs informations
+4. Fill the csv with the EPGs informations
 Example:
 
 VLAN_ID | VLAN_NAME | EPG 			| ANP 		| BD 		   | VRF 	   | TENANT
@@ -37,7 +37,7 @@ VLAN_ID | VLAN_NAME | EPG 			| ANP 		| BD 		   | VRF 	   | TENANT
 
 <br>
 
- 5. Run the playbook:<br>
+5. Run the playbook:<br>
 `$ ansible-playbook playbook.yml`
 
 
