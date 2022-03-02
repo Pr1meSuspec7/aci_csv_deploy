@@ -8,6 +8,9 @@ This is an Ansible script that can help you to deploy many object from a CSV fil
 *  Ansible
 *  Paramiko
 
+> **RECOMMENDATION**:<br>
+> Use python virtual environment and run `$ pip install ansible paramiko`
+
 <br>
 
 ## How to use
