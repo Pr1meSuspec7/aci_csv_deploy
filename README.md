@@ -10,8 +10,8 @@ This is an Ansible script that can help you to deploy many object from a CSV fil
 
 
 
- 1. Before all you have to set up your inventory file (inv.ini) and credentials file (group_vars/apic.yml).
- 2. In the "playbook.yml" change lines 70,71 with the correct "Domain" and "Domain Type" you want to use.
+ 1. Before all you have to set up your inventory file (inv.ini) and credentials file (group_vars/apic.yml).<br>
+ 2. In the "playbook.yml" change lines 70,71 with the correct "Domain" and "Domain Type" you want to use.<br>
  3. In the main folder there is a CSV file called "epg_list.csv" which contains some columns:
 
 
@@ -19,9 +19,10 @@ VLAN_ID | VLAN_NAME | EPG | ANP | BD | VRF | TENANT
 ------- | --------- | --- | --- | -- | --- | ------
 
 
-> **WARNING**:
+> **WARNING**:<br>
 > You should not change these keys, if you do this you have to make some changes in the ansible playbook.
 
+<br>
 
  4. Fill the csv with the EPGs informations
 Example:
@@ -32,12 +33,13 @@ VLAN_ID | VLAN_NAME | EPG 			| ANP 		| BD 		   | VRF 	   | TENANT
 20		| myapp-app | myapp-app_epg | myapp_anp | myapp-app_bd | myapp_vrf | PROD
 30		| myapp-db  | myapp-db_epg  | myapp_anp | myapp-db_bd  | myapp_vrf | PROD
 
- 5. Run the playbook:
+ 5. Run the playbook:<br>
 `$ ansible-playbook playbook.yml`
 
 
 > **NOTE**: Before run you have to be sure the tenant exist because the playbook don't create tenants.
 
+<br>
 
 ## License
 
