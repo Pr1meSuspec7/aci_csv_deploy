@@ -8,7 +8,9 @@ This is an Ansible script that can help you to deploy many object from a CSV fil
 *  Ansible
 *  Paramiko
 
+<br>
 
+## How to use
 
 1. Before all you have to set up your inventory file (inv.ini) and credentials file (group_vars/apic.yml).<br><br>
 2. In the "playbook.yml" change lines 70,71 with the correct "Domain" and "Domain Type" you want to use.<br><br>
