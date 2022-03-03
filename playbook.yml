@@ -56,6 +56,7 @@
         tenant: "{{ item.TENANT }}"
         ap: "{{ item.ANP }}"
         epg: "{{ item.EPG }}"
+        bd: "{{ item.BD }}"
         description: "VLAN_{{ item.VLAN_ID }}"
         state: present
       loop: "{{ epg_list.list }}"
