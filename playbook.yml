@@ -47,6 +47,7 @@
         vrf: "{{ item.VRF }}"
         l2_unknown_unicast: flood
         arp_flooding: yes
+        enable_routing: no
         state: present
       loop: "{{ epg_list.list }}"
 
