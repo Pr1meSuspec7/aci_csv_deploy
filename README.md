@@ -3,7 +3,7 @@
 
 This Ansible playbook allows you to manage and deploy ACI objects (Tenant, BD, EPG, etc...) using a CSV file.<br>
 In this way you can use a simple csv file to keep updated your infrastructure and track each object, vlan id, subnets, etc...<br>
-You can test this playbook on [Cisco ACI Sandbox](https://sandboxapicdc.cisco.com) registering on [Cisco DevNet](https://developer.cisco.com/).<br>
+You can test this playbook on [Cisco ACI Sandbox](https://sandboxapicdc.cisco.com) registering on [Cisco DevNet](https://developer.cisco.com/site/sandbox/).<br>
 
 
 ## Requirements
@@ -38,7 +38,7 @@ $ ansible-galaxy collection install cisco.aci
 **1. First of all you have to set up your inventory (inv.ini) and credentials (group_vars/apic.yml):**<br>
 - Set in inv.ini file URL or IP of your APIC
 - Set in group_vars/apic.yml file username/password of your APIC
-> **NOTE**: if you want to test it on [Cisco ACI Sandbox](https://sandboxapicdc.cisco.com) don't touch inv.ini file and retrive login credentials from [Cisco DevNet](https://developer.cisco.com/) to put in the group_vars/apic.yml file.
+> **NOTE**: if you want to test it on [Cisco ACI Sandbox](https://sandboxapicdc.cisco.com) don't touch inv.ini file and retrive login credentials from [Cisco DevNet](https://developer.cisco.com/site/sandbox/) to put in the group_vars/apic.yml file.
 
 <br>
 
