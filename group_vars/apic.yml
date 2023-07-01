@@ -1,6 +1,6 @@
 ---
-username: "admin"
-password: "!v3G@!4@Y"
+username: ""
+password: ""
 
 # my python venv
 ansible_python_interpreter: $(which python)

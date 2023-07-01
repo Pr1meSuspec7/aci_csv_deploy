@@ -2,13 +2,13 @@
 - name: "PLAY: DEPLOY OBJECTS FROM CSV"
   hosts: apic
   connection: local
-  gather_facts: False
+  gather_facts: false
   vars:
     apic_info: &apic_info
       host: "{{ inventory_hostname }}"
       username: "{{ username }}"
       password: "{{ password }}"
-      validate_certs: no
+      validate_certs: false
 
   tasks:
 
@@ -17,27 +17,33 @@
         path: epg_list.csv
       register: epg_list
 
-# Decomment to check "READ CSV" output
-#    - name: "Debug"
+#    - name: "Decomment only to debug CSV reading"
 #      debug: var=epg_list
 
-
+    - name: "DEPLOY: TENANT"
+      cisco.aci.aci_tenant:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        description: ""
+        state: present
+        annotation: ""
+      loop: "{{ epg_list.list }}"
+      when: item.TENANT_EXIST == "no"
+#      environment:
+#        no_proxy: apic-hostname
 
     - name: "DEPLOY: VRFs"
       cisco.aci.aci_vrf:
         <<: *apic_info
         tenant: "{{ item.TENANT }}"
         vrf: "{{ item.VRF }}"
+        preferred_group: "{{ item.VRF_PREFERRED }}"
         state: present
+        annotation: ""
       loop: "{{ epg_list.list }}"
-
-    - name: "DEPLOY: ANPs"
-      cisco.aci.aci_ap:
-        <<: *apic_info
-        tenant: "{{ item.TENANT }}"
-        ap: "{{ item.ANP }}"
-        state: present
-      loop: "{{ epg_list.list }}"
+      when: item.VRF_EXIST == "no"
+#      environment:
+#        no_proxy: apic-hostname
 
     - name: "DEPLOY: BDs"
       cisco.aci.aci_bd:
@@ -45,11 +51,26 @@
         tenant: "{{ item.TENANT }}"
         bd: "{{ item.BD }}"
         vrf: "{{ item.VRF }}"
-        l2_unknown_unicast: flood
-        arp_flooding: yes
-        enable_routing: no
+        l2_unknown_unicast: "{{ item.L2_UNKUNICAST }}" # proxy|flood
+        arp_flooding: "{{ item.ARP_FLOODING }}"
+        enable_routing: "{{ item.ROUTING }}"
         state: present
+        annotation: ""
       loop: "{{ epg_list.list }}"
+#      environment:
+#        no_proxy: apic-hostname
+
+    - name: "DEPLOY: ANPs"
+      cisco.aci.aci_ap:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        ap: "{{ item.ANP }}"
+        state: present
+        annotation: ""
+      loop: "{{ epg_list.list }}"
+      when: item.ANP_EXIST == "no"
+#      environment:
+#        no_proxy: apic-hostname
 
     - name: "DEPLOY: EPGs"
       cisco.aci.aci_epg:
@@ -59,8 +80,12 @@
         epg: "{{ item.EPG }}"
         bd: "{{ item.BD }}"
         description: "VLAN_{{ item.VLAN_ID }}"
+        preferred_group: "{{ item.EPG_PREFERRED }}"
         state: present
+        annotation: ""
       loop: "{{ epg_list.list }}"
+#      environment:
+#        no_proxy: apic-hostname
 
     - name: "DEPLOY: DOMAIN TO EPG"
       cisco.aci.aci_epg_to_domain:
@@ -68,8 +93,58 @@
         tenant: "{{ item.TENANT }}"
         ap: "{{ item.ANP }}"
         epg: "{{ item.EPG }}"
-        # Remember to set your Domain
-        domain: Physical_PhysDom
-        domain_type: phys
+        domain: "{{ item.DOMAIN }}"
+        domain_type: "{{ item.DOMAIN_TYPE }}" # phys|vmm
         state: present
+        annotation: ""
       loop: "{{ epg_list.list }}"
+      when: item.DOMAIN | length > 0
+#      environment:
+#        no_proxy: apic-hostname
+
+    - name: "DEPLOY: SUBNET"
+      cisco.aci.aci_bd_subnet:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        bd: "{{ item.BD }}"
+        gateway: "{{ item.GW }}"
+        mask: "{{ item.MASK }}"
+        preferred: "{{ item.GW_PRIMARY }}"
+#        scope: [private, public, shared]
+        scope: "{{ item.SUBNET_SCOPE }}"
+        state: present
+        annotation: ""
+      loop: "{{ epg_list.list }}"
+      when: item.GW | length > 0
+#      environment:
+#        no_proxy: apic-hostname
+
+    - name: "DEPLOY: Add a new provider contract"
+      cisco.aci.aci_epg_to_contract:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        ap: "{{ item.ANP }}"
+        epg: "{{ item.EPG }}"
+        contract: "{{ item.PROV_CONTRACT }}"
+        contract_type: provider
+        state: present
+        annotation: ""
+      loop: "{{ epg_list.list }}"
+      when: item.PROV_CONTRACT | length > 0
+#      environment:
+#        no_proxy: apic-hostname
+
+    - name: "DEPLOY: Add a new consumer contract"
+      cisco.aci.aci_epg_to_contract:
+        <<: *apic_info
+        tenant: "{{ item.TENANT }}"
+        ap: "{{ item.ANP }}"
+        epg: "{{ item.EPG }}"
+        contract: "{{ item.CONS_CONTRACT }}"
+        contract_type: consumer
+        state: present
+        annotation: ""
+      loop: "{{ epg_list.list }}"
+      when: item.CONS_CONTRACT | length > 0
+#      environment:
+#        no_proxy: apic-hostname

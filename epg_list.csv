@@ -1,4 +1,7 @@
-VLAN_ID,VLAN_NAME,EPG,ANP,BD,VRF,TENANT
-10,myapp-web,myapp-web_epg,myapp_anp,myapp-web_bd,myapp_vrf,PROD
-20,myapp-app,myapp-app_epg,myapp_anp,myapp-app_bd,myapp_vrf,PROD
-30,myapp-db,myapp-db_epg,myapp_anp,myapp-db_bd,myapp_vrf,PROD
+TENANT,TENANT_EXIST,VRF,VRF_EXIST,VRF_PREFERRED,BD,L2_UNKUNICAST,ARP_FLOODING,ROUTING,GW,MASK,GW_PRIMARY,SUBNET_SCOPE,ANP,ANP_EXIST,EPG,VLAN_ID,DOMAIN_TYPE,DOMAIN,EPG_PREFERRED,PROV_CONTRACT,CONS_CONTRACT
+dev-net-centric,no,app-1_vrf,no,disabled,web_bd,proxy,no,yes,192.168.10.1,24,yes,public,app-1_anp,no,web_epg,10,phys,phys_dom,no,web_ct,app_ct
+dev-net-centric,yes,app-1_vrf,yes,disabled,app_bd,proxy,no,yes,192.168.20.1,24,yes,public,app-1_anp,yes,app_epg,20,phys,phys_dom,no,app_ct,db_ct
+dev-net-centric,yes,app-1_vrf,yes,disabled,database_bd,proxy,no,yes,192.168.30.1,24,yes,public,app-1_anp,yes,database_epg,30,phys,phys_dom,no,db_ct,
+dev-app-centric,no,app-1_vrf,no,disabled,app-1_bd,proxy,no,yes,192.168.10.1,24,yes,public,app-1_anp,no,web_epg,10,phys,phys_dom,no,web_ct,app_ct
+dev-app-centric,yes,app-1_vrf,yes,disabled,app-1_bd,proxy,no,yes,192.168.10.1,24,yes,public,app-1_anp,yes,app_epg,20,phys,phys_dom,no,app_ct,db_ct
+dev-app-centric,yes,app-1_vrf,yes,disabled,app-1_bd,proxy,no,yes,192.168.10.1,24,yes,public,app-1_anp,yes,db_epg,30,phys,phys_dom,no,db_ct,
